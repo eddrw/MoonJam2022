@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour
 
     private float _stunTimer = 0.0f;
     private readonly static float STUN_DURATION = 5.0f;
+    private float _checkTimer;
 
     void Start()
     {
@@ -21,9 +22,14 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        if (_agent.enabled)
+        _checkTimer += Time.deltaTime;
+        if (_checkTimer > 0.5f)
         {
-            _agent.SetDestination(_player.position);
+            _checkTimer = 0.0f;
+            if (_agent.enabled && IsAgentOnNavMesh(_agent.transform))
+            {
+                _agent.SetDestination(_player.position);
+            }
         }
         else {
             _stunTimer += Time.deltaTime;
@@ -41,14 +47,35 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public bool IsAgentOnNavMesh(Transform agentObject)
+    {
+        float onMeshThreshold = 1.0f;
+        Vector3 agentPosition = agentObject.position;
+        NavMeshHit hit;
+
+        // Check for nearest point on navmesh to agent, within onMeshThreshold
+        if (NavMesh.SamplePosition(agentPosition, out hit, onMeshThreshold, NavMesh.AllAreas))
+        {
+            // Check if the positions are vertically aligned
+            if (Mathf.Approximately(agentPosition.x, hit.position.x)
+                && Mathf.Approximately(agentPosition.z, hit.position.z))
+            {
+                // Lastly, check if object is below navmesh
+                return agentPosition.y >= hit.position.y;
+            }
+        }
+
+        return false;
+    }
+
     public void OnAttacked(Vector3 dir)
     {
         if (_agent.enabled)
         {
             _agent.Stop();
         }
-        _agent.enabled = false;
+        //_agent.enabled = false;
         _rb.isKinematic = false;
-        _rb.AddForce(dir * 20f, ForceMode.VelocityChange);
+        _rb.AddForce(dir * 20f + Vector3.up * 5, ForceMode.VelocityChange);
     }
 }

@@ -4,23 +4,56 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Component References")]
+    // Rotation Base – Anything that should rotate with the player
+    // is a child of the base object.
+    [SerializeField] private Transform _base;
     [SerializeField] private Transform _model;
+    [SerializeField] private Transform _cursor;
+    [SerializeField] private Transform _shortAttack;
+    [SerializeField] private Camera _camera;
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject _dashEffectPrefab;
+
+    [Header("Movement Settings")]
     [SerializeField] private float _speed = 8.0f;
+    [SerializeField] private float _dashSpeed = 10f; // Units per second
     [SerializeField] private float _jump = 10.0f;
     [SerializeField] private float _gravity = -20f;
-    private Transform _camera;
+    private bool _gravityEnabled = true;
+
+    [Header("Attack Settings")]
+    
     private Rigidbody _rb;
+    private Collider _collider;
 
 
-    void Start()
+    // Dash Data
+    private bool _isDashing;
+    private float _dashTimer;
+    private Vector3 _dashStart;
+    private Vector3 _dashEnd;
+    private ParticleSystem _dashEffect;
+    private float _dashDuration;
+
+
+    private void Awake()
     {
-        _camera = Camera.main.transform;
+        _collider = this.GetComponent<CapsuleCollider>();
         _rb = this.GetComponent<Rigidbody>();
         _rb.useGravity = false;
     }
 
-    void Update()
+    private void Update()
     {
+        UpdatedCursorPosition();
+
+        if (_isDashing)
+        {
+            UpdatePhantomDash();
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
@@ -28,21 +61,53 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            Attack();
+            ShortAttack();
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            OnPhantomDashBegin();
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         HandleMovement();
+        HandleRotation();
 
-        _rb.AddForce(Vector3.up * _gravity);
+        ApplyGravity();
+    }
+
+    /*-------------------------  Cursor  -------------------------*/
+
+    private void UpdatedCursorPosition()
+    {
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Cursor"))) {
+            _cursor.position = hit.point;
+        }
+    }
+
+    /*-------------------------  Movement  -------------------------*/
+    private void ApplyGravity()
+    {
+        if (_gravityEnabled)
+        {
+            _rb.AddForce(Vector3.up * _gravity * 100 * Time.fixedDeltaTime, ForceMode.Acceleration);
+        }
+    }
+
+    private void HandleRotation()
+    {
+        var lookAt = _cursor.position;
+        lookAt.y = _base.position.y;
+        _base.LookAt(lookAt);
     }
 
     void HandleMovement()
     {
-        var forward = _camera.forward;
-        var right = _camera.right;
+        var forward = _camera.transform.forward;
+        var right = _camera.transform.right;
 
         var direction = Vector3.zero;
 
@@ -67,7 +132,6 @@ public class PlayerController : MonoBehaviour
         direction.y = 0.0f;
         direction.Normalize();
 
-        // this.transform.position += direction * Time.deltaTime * _speed;
         Move(direction);
     }
 
@@ -79,8 +143,6 @@ public class PlayerController : MonoBehaviour
         v.x = dir.x * _speed;
         v.z = dir.z * _speed;
         _rb.velocity = v;
-
-        _model.LookAt(this.transform.position + dir);
     }
 
     private void Jump()
@@ -88,12 +150,84 @@ public class PlayerController : MonoBehaviour
         _rb.AddForce(Vector3.up * _jump, ForceMode.Impulse);
     }
 
+    /*-------------------------  Utility  -------------------------*/
+
+    private void SetPlayerCollisions(bool enabled)
+    {
+        _collider.enabled = enabled;
+        _rb.isKinematic = !enabled;
+    }
+
+    private void SetPlayerGravity(bool enabled)
+    {
+        _gravityEnabled = enabled;
+    }
+
+
+    /*-------------------------  Attacks  -------------------------*/
+    private void UpdatePhantomDash()
+    {
+        _dashTimer += Time.deltaTime;
+        
+        float t = Mathf.Min(_dashTimer / _dashDuration, 1.0f);
+
+        var position = Vector3.Lerp(_dashStart, _dashEnd, t);
+        this.transform.position = position;
+
+        if (t >= 1.0f)
+        {
+            OnPhantomDashEnd();
+        }
+    }
+
+    private void OnPhantomDashBegin()
+    {
+        SetPlayerCollisions(false);
+        SetPlayerGravity(false);
+        _isDashing = true;
+        _dashStart = this.transform.position;
+        _dashEnd = _cursor.transform.position;
+        _dashDuration = (_dashEnd - _dashStart).magnitude / _dashSpeed;
+        _dashTimer = 0.0f;
+
+        var dashGameObject = Instantiate<GameObject>(_dashEffectPrefab, _base);
+        _dashEffect = dashGameObject.GetComponent<ParticleSystem>();
+
+        _model.gameObject.SetActive(false);
+    }
+
+    private void OnPhantomDashEnd()
+    {
+        SetPlayerCollisions(true);
+        SetPlayerGravity(true);
+        _isDashing = false;
+        _dashEffect.transform.parent = null;
+
+        _model.gameObject.SetActive(true);
+    }
+
+    private void ShortAttack()
+    {
+        var center = _shortAttack.position;
+        var halfSize = _shortAttack.localScale * 0.5f;
+
+        var colliders = Physics.OverlapBox(center, halfSize, Quaternion.identity, LayerMask.GetMask("Enemy"));
+
+        foreach (var collider in colliders)
+        {
+            var enemy = collider.gameObject.GetComponentInParent<EnemyController>();
+            enemy.OnAttacked(enemy.transform.position - this.transform.position);
+        }
+    }
+
+
     private Vector3 _center;
     private float _radius;
 
     private void Attack()
     {
-        _center = this.transform.position + _model.forward * 2f;
+        // _center = this.transform.position + _base.forward * 2f;
+        _center = _cursor.position;
         _radius = 2.0f;
         var colliders = Physics.OverlapSphere(_center, _radius, LayerMask.GetMask("Enemy"));
         foreach (var collider in colliders)
@@ -107,5 +241,10 @@ public class PlayerController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(_center, _radius);
+
+        // if (_cursor != null)
+        // {
+        //     Gizmos.DrawSphere(_cursor.position, 1);
+        // }
     }
 }
