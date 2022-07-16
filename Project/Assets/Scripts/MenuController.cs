@@ -15,7 +15,7 @@ public class MenuController : MonoBehaviour
             SceneManager.LoadScene("GamePlay");
         }
 
-        float intensity = Mathf.Sin(2*Time.realtimeSinceStartup);
+        float intensity = (1 + Mathf.Sin(2*Time.realtimeSinceStartup)) / 2;
         _blinkText.color = new Color(1,1,1,intensity);
     }
 }
