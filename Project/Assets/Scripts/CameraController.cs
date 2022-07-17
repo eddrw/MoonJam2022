@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
     }
 
 
-    void Update()
+    void LateUpdate()
     {
         // this.transform.position = _player.position + _targetOffset;
         var targetPosition = _player.position + _targetOffset;

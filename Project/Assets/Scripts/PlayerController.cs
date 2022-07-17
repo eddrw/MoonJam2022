@@ -12,14 +12,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _cursor;
     [SerializeField] private Transform _shortAttack;
     [SerializeField] private Camera _camera;
+    [SerializeField] private Animator _animator;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject _dashEffectPrefab;
 
     [Header("Movement Settings")]
-    [SerializeField] private float _speed = 8.0f;
+    [SerializeField] private float _speed = 8000.0f;
     [SerializeField] private float _dashSpeed = 10f; // Units per second
-    [SerializeField] private float _jump = 10.0f;
+    [SerializeField] private float _jump = 20.0f;
     [SerializeField] private float _gravity = -20f;
     private bool _gravityEnabled = true;
 
@@ -43,6 +44,7 @@ public class PlayerController : MonoBehaviour
         _collider = this.GetComponent<CapsuleCollider>();
         _rb = this.GetComponent<Rigidbody>();
         _rb.useGravity = false;
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -76,6 +78,17 @@ public class PlayerController : MonoBehaviour
         HandleRotation();
 
         ApplyGravity();
+
+        if (_rb.velocity.sqrMagnitude > 0.01f)
+        {
+            _animator.SetBool("Walking", true);
+            _animator.SetBool("Idle", false);
+        }
+        else
+        {
+            _animator.SetBool("Walking", false);
+            _animator.SetBool("Idle", true);
+        }
     }
 
     /*-------------------------  Cursor  -------------------------*/
