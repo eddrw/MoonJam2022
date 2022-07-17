@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _bashCollider;
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private Camera _camera;
+    [SerializeField] private UIManager _uiManager;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject _dashEffectPrefab;
@@ -26,6 +27,13 @@ public class PlayerController : MonoBehaviour
     private bool _gravityEnabled = true;
 
     [Header("Attack Settings")]
+    [SerializeField] private float _dashCooldownDuration = 1.0f;
+    [SerializeField] private float _bashCooldownDuration = 1.0f;
+    [SerializeField] private float _jumpCooldownDuration = 0.2f;
+    [SerializeField] private float _scriptCooldownDuration = 1.0f;
+
+    private float _jumpCooldownTimer;
+    private float _scriptCooldownTimer;
 
     [SerializeField] private AnimationCurve _bashSpin;
     [SerializeField] private float _bashDelay;
@@ -38,6 +46,7 @@ public class PlayerController : MonoBehaviour
 
     // Phantom Dash Data
     private bool _isDashing;
+    private float _dashCooldownTimer;
     private float _dashTimer;
     private Vector3 _dashStart;
     private Vector3 _dashEnd;
@@ -46,6 +55,7 @@ public class PlayerController : MonoBehaviour
 
     // Briefcase Bash Data
     private bool _isBashing;
+    private float _bashCooldownTimer;
     private float _bashTimer;
     private Quaternion _bashInitRot;
     private TrailRenderer _bashEffect;
@@ -61,29 +71,35 @@ public class PlayerController : MonoBehaviour
     {
         UpdatedCursorPosition();
 
-        if (_isDashing)
-        {
-            UpdatePhantomDash();
-        }
-        else if (_isBashing)
-        {
-            UpdateBriefcaseBash();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && _jumpCooldownTimer >= _jumpCooldownDuration)
         {
             Jump();
+        }
+        else
+        {
+            _jumpCooldownTimer += Time.deltaTime;
+            var cooldownPercentage = 1f - Mathf.Clamp01(_jumpCooldownTimer / _jumpCooldownDuration);
+            _uiManager.SetAbilityPercentage("Jump", cooldownPercentage);
         }
 
         if (Input.GetMouseButtonDown(1) && !_isDashing)
         {
-            OnPhantomDashBegin();
+            if (_dashCooldownTimer >= _dashCooldownDuration)
+            {
+                OnPhantomDashBegin();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && !_isBashing)
         {
-            OnBriefcaseBashBegin();
+            if (_bashCooldownTimer >= _bashCooldownDuration)
+            {
+                OnBriefcaseBashBegin();
+            }
         }
+
+        UpdatePhantomDash();
+        UpdateBriefcaseBash();
     }
 
     private void FixedUpdate()
@@ -169,6 +185,8 @@ public class PlayerController : MonoBehaviour
         if (IsGrounded())
         {
             _rb.AddForce(Vector3.up * _jump, ForceMode.Impulse);
+            _jumpCooldownTimer = 0.0f;
+            _uiManager.SetAbilityPercentage("Jump", 1.0f);
         }
     }
 
@@ -203,16 +221,25 @@ public class PlayerController : MonoBehaviour
 
     private void UpdatePhantomDash()
     {
-        _dashTimer += Time.deltaTime;
-        
-        float t = Mathf.Min(_dashTimer / _dashDuration, 1.0f);
-
-        var position = Vector3.Lerp(_dashStart, _dashEnd, t);
-        this.transform.position = position;
-
-        if (t >= 1.0f)
+        if (_isDashing)
         {
-            OnPhantomDashEnd();
+            _dashTimer += Time.deltaTime;
+
+            float t = Mathf.Min(_dashTimer / _dashDuration, 1.0f);
+
+            var position = Vector3.Lerp(_dashStart, _dashEnd, t);
+            this.transform.position = position;
+
+            if (t >= 1.0f)
+            {
+                OnPhantomDashEnd();
+            }
+        }
+        else
+        {
+            _dashCooldownTimer += Time.deltaTime;
+            var cooldownPercentage = 1f - Mathf.Clamp01(_dashCooldownTimer / _dashCooldownDuration);
+            _uiManager.SetAbilityPercentage("Dash", cooldownPercentage);
         }
     }
 
@@ -230,6 +257,8 @@ public class PlayerController : MonoBehaviour
         _dashEffect = dashGameObject.GetComponent<ParticleSystem>();
 
         _model.gameObject.SetActive(false);
+
+        _uiManager.SetAbilityPercentage("Dash", 1.0f);
     }
 
     private void OnPhantomDashEnd()
@@ -237,6 +266,7 @@ public class PlayerController : MonoBehaviour
         SetPlayerCollisions(true);
         SetPlayerGravity(true);
         _isDashing = false;
+        _dashCooldownTimer = 0.0f;
         _dashEffect.transform.parent = null;
 
         _model.gameObject.SetActive(true);
@@ -246,40 +276,50 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateBriefcaseBash()
     {
-        _bashTimer += Time.deltaTime;
-
-        float t = Mathf.Min(_bashTimer / _bashDuration, 1.0f);
-
-        t = _bashSpin.Evaluate(t);
-
-        float height = Mathf.Lerp(_bashHeightRange.x, _bashHeightRange.y, t);
-        _bashEffect.transform.localPosition = new Vector3(_bashEffect.transform.localPosition.x, height, _bashEffect.transform.localPosition.z);
-
-        float angle = (360 * _bashRotationCount) * t;
-
-        Quaternion rot = Quaternion.AngleAxis(angle, _base.up);
-
-        _base.localRotation = rot * _bashInitRot;
-
-        if (_bashTimer >= _bashDelay)
+        if (_isBashing)
         {
-            if (!_bashEffect.gameObject.activeSelf)
+            _bashTimer += Time.deltaTime;
+
+            float t = Mathf.Min(_bashTimer / _bashDuration, 1.0f);
+
+            t = _bashSpin.Evaluate(t);
+
+            float height = Mathf.Lerp(_bashHeightRange.x, _bashHeightRange.y, t);
+            _bashEffect.transform.localPosition = new Vector3(_bashEffect.transform.localPosition.x, height, _bashEffect.transform.localPosition.z);
+
+            float angle = (360 * _bashRotationCount) * t;
+
+            Quaternion rot = Quaternion.AngleAxis(angle, _base.up);
+
+            _base.localRotation = rot * _bashInitRot;
+
+            if (_bashTimer >= _bashDelay)
             {
-                _bashEffect.gameObject.SetActive(true);
+                if (!_bashEffect.gameObject.activeSelf)
+                {
+                    _bashEffect.gameObject.SetActive(true);
+                }
+
+                var colliders = Physics.OverlapBox(_bashCollider.position, _bashCollider.localScale / 2, Quaternion.identity, LayerMask.GetMask("Enemy"));
+                foreach (var collider in colliders)
+                {
+                    var enemy = collider.gameObject.GetComponentInParent<EnemyController>();
+                    enemy.OnAttacked(enemy.transform.position - this.transform.position);
+                }
             }
 
-            var colliders = Physics.OverlapBox(_bashCollider.position, _bashCollider.localScale / 2, Quaternion.identity, LayerMask.GetMask("Enemy"));
-            foreach (var collider in colliders)
+            if (t >= 1.0f)
             {
-                var enemy = collider.gameObject.GetComponentInParent<EnemyController>();
-                enemy.OnAttacked(enemy.transform.position - this.transform.position);
+                OnBriefcaseBashEnd();
             }
         }
-   
-        if (t >= 1.0f)
+        else
         {
-            OnBriefcaseBashEnd();
+            _bashCooldownTimer += Time.deltaTime;
+            var cooldownPercentage = 1f - Mathf.Clamp01(_bashCooldownTimer / _bashCooldownDuration);
+            _uiManager.SetAbilityPercentage("Bash", cooldownPercentage);
         }
+        
 
     }
 
@@ -294,11 +334,14 @@ public class PlayerController : MonoBehaviour
         go.transform.localPosition = new Vector3(0, _bashHeightRange.x, 2);
         go.transform.localRotation = Quaternion.Euler(90, 0, 90);
         _bashEffect = go.GetComponent<TrailRenderer>();
+
+        _uiManager.SetAbilityPercentage("Bash", 1.0f);
     }
 
     private void OnBriefcaseBashEnd()
     {
         _isBashing = false;
+        _bashCooldownTimer = 0.0f;
         _bashEffect.emitting = false;
     }
 }
