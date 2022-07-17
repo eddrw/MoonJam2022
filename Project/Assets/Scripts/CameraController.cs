@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private Transform _player;
+    [SerializeField] private Transform _target;
 
-    private Vector3 _targetOffset;
+    private Vector3 _offsetDirection;
+    [SerializeField] private float _offsetDistance;
+    //private Vector3 _targetOffset;
     private float _smoothTime = 0.3f;
     private Vector3 _velocity = Vector3.zero;
 
@@ -18,21 +20,23 @@ public class CameraController : MonoBehaviour
 
     private void Initialize()
     {
-        if (_player == null)
+        if (_target == null)
         {
             Debug.LogError("[CameraController] Missing reference to player game object.");
         }
 
-        _targetOffset = this.transform.position - _player.position;
-        this.transform.LookAt(_player.position);
+        var offset = this.transform.position - _target.position;
+        _offsetDirection = offset.normalized;
+        _offsetDistance = offset.magnitude;
+        this.transform.LookAt(_target.position);
 
     }
 
 
     void Update()
     {
-        // this.transform.position = _player.position + _targetOffset;
-        var targetPosition = _player.position + _targetOffset;
+        // this.transform.position = _target.position + _targetOffset;
+        var targetPosition = _target.position + _offsetDirection * _offsetDistance;
         transform.position = Vector3.SmoothDamp(this.transform.position, targetPosition, ref _velocity, _smoothTime);
     }
 }

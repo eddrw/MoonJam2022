@@ -68,8 +68,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Bullet
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 723f74e6641624b8fbd57e2402e77be1, type: 2}
+  m_sharedMaterial: {fileID: -4690105548665120187, guid: 723f74e6641624b8fbd57e2402e77be1,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,12 +94,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 71.6
+  m_fontSize: 61.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 100
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -195,8 +196,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3a827716c7ed4fc6930da00c86bc9ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
+  _speed: 15
   _text: {fileID: 216255963334010610}
+  _hitEffectPrefab: {fileID: 1165429759549487399, guid: 18e975b1a506e4a01b5fbf49cfc18c52,
+    type: 3}
 --- !u!54 &1197178155
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -251,7 +254,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 80}
+  m_SizeDelta: {x: 400, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &216255963668271954
 Canvas:
