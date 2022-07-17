@@ -8,7 +8,8 @@ using System.Linq;
 public class ScriptGun : MonoBehaviour
 {
     public string text = "Testing one two three!!";
-    [SerializeField] private float _coolDownPerCharacter = 0.25f;
+    [SerializeField] private float _coolDown = 0.3f;
+    [SerializeField] private float _bulletSpeed = 10f;
 
     [SerializeField] private GameObject _bulletPrefab;
 
@@ -16,7 +17,10 @@ public class ScriptGun : MonoBehaviour
     private int _wordIndex = 0;
 
     private float _timeSinceLastShot = 0.0f;
-    private float _coolDown;
+
+    private Vector3 _prevPosition;
+    private Vector3 _currPosition;
+
 
     private void Awake()
     {
@@ -33,10 +37,14 @@ public class ScriptGun : MonoBehaviour
             _timeSinceLastShot = 0.0f;
             Shoot();
         }
+
+        _prevPosition = _currPosition;
+        _currPosition = this.transform.position;
     }
 
     public void Shoot()
     {
+        Vector3 velocity = (_currPosition - _prevPosition) / Time.deltaTime;
 
         string word = _words[_wordIndex];
         
@@ -45,14 +53,11 @@ public class ScriptGun : MonoBehaviour
         {
             _wordIndex = 0;
         }
-
-        _coolDown = _coolDownPerCharacter * word.Length;
-
         GameObject go = Instantiate(_bulletPrefab, null);
         go.transform.position = this.transform.position;
         go.transform.localRotation = this.transform.rotation;
         ScriptBullet bullet = go.GetComponent<ScriptBullet>();
 
-        bullet.Initialize(word, Camera.main.transform);
+        bullet.Initialize(word, Camera.main.transform, _bulletSpeed, velocity);
     }
 }

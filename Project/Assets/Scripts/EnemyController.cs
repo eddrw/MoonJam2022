@@ -72,7 +72,7 @@ public class EnemyController : MonoBehaviour
     {
         if (_agent.enabled)
         {
-            _agent.Stop();
+            _agent.isStopped = true;
         }
         //_agent.enabled = false;
         _rb.isKinematic = false;
