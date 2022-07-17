@@ -15,12 +15,14 @@ public class ScriptBullet : MonoBehaviour
     private Transform _camera;
 
     private float _baseSpeed;
+    private int _damage;
 
-    public void Initialize(string text, Transform camera, float speed, Vector3 baseVelocity)
+    public void Initialize(string text, Transform camera, float speed, Vector3 baseVelocity, int damage)
     {
         _text.text = text;
         _camera = camera;
         _speed = speed;
+        _damage = damage;
 
         _baseSpeed = Mathf.Max( 0.0f, Vector3.Dot(this.transform.forward, baseVelocity) );
 
@@ -52,16 +54,17 @@ public class ScriptBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy")
+        if (other.gameObject.layer == LayerMask.NameToLayer("Attackable"))
         {
-            var enemy = other.GetComponentInParent<EnemyController>();
-            enemy.OnAttacked(enemy.transform.position - this.transform.position);
+            var attackTarget = other.GetComponentInParent<IAttackable>();
+            attackTarget.OnAttacked(this.transform.position, _damage);
         }
 
         if (other.tag != "Player" && other.tag != "ScriptBullet")
         {
             Explode();
-            //Debug.Log("Destroyed! " + other.tag + " | " + other.name);
+            //Debug.Log(LayerMask.NameToLayer("Attackable"));
+            //Debug.Log("Destroyed! " + other.tag + " | " + other.name + " | " + other.gameObject.layer);
         }
     }
 

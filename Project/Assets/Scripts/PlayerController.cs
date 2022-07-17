@@ -14,10 +14,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private Camera _camera;
     [SerializeField] private UIManager _uiManager;
+    [SerializeField] private ScriptGun _scriptGun;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject _dashEffectPrefab;
     [SerializeField] private GameObject _bashEffectPrefab;
+    [SerializeField] private GameObject _hitPointIndicator;
 
     [Header("Movement Settings")]
     [SerializeField] private float _speed = 8.0f;
@@ -27,6 +29,9 @@ public class PlayerController : MonoBehaviour
     private bool _gravityEnabled = true;
 
     [Header("Attack Settings")]
+    [SerializeField] private int _bashDamage = 2;
+    [SerializeField] private int _scriptDamage = 1;
+
     [SerializeField] private float _dashCooldownDuration = 1.0f;
     [SerializeField] private float _bashCooldownDuration = 1.0f;
     [SerializeField] private float _jumpCooldownDuration = 0.2f;
@@ -40,6 +45,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _bashDuration;
     [SerializeField] private float _bashRotationCount;
     [SerializeField] private Vector2 _bashHeightRange = new Vector2(0.5f, 1.5f);
+
+    [Header("Health Settings")]
+    [SerializeField] private int _maxHealth = 5;
+
 
     private Rigidbody _rb;
     private Collider _collider;
@@ -60,15 +69,30 @@ public class PlayerController : MonoBehaviour
     private Quaternion _bashInitRot;
     private TrailRenderer _bashEffect;
 
+    // Health
+    private int _health;
+
     private void Awake()
     {
         _collider = this.GetComponent<CapsuleCollider>();
         _rb = this.GetComponent<Rigidbody>();
         _rb.useGravity = false;
+        _health = _maxHealth;
+        _uiManager.SetHealthPercentage(_health / _maxHealth);
+        _scriptGun.Initialize(_scriptDamage);
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            OnHeal(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            OnTakeDamage(1);
+        }
+
         UpdatedCursorPosition();
 
         if (Input.GetKeyDown(KeyCode.Space) && _jumpCooldownTimer >= _jumpCooldownDuration)
@@ -300,11 +324,13 @@ public class PlayerController : MonoBehaviour
                     _bashEffect.gameObject.SetActive(true);
                 }
 
-                var colliders = Physics.OverlapBox(_bashCollider.position, _bashCollider.localScale / 2, Quaternion.identity, LayerMask.GetMask("Enemy"));
+                var colliders = Physics.OverlapBox(_bashCollider.position, _bashCollider.localScale / 2, Quaternion.identity, LayerMask.GetMask("Attackable"));
                 foreach (var collider in colliders)
                 {
-                    var enemy = collider.gameObject.GetComponentInParent<EnemyController>();
-                    enemy.OnAttacked(enemy.transform.position - this.transform.position);
+                    var attackTarget = collider.gameObject.GetComponentInParent<IAttackable>();
+                    attackTarget.OnAttacked(this.transform.position, _bashDamage);
+                    //var enemy = collider.gameObject.GetComponentInParent<EnemyController>();
+                    //enemy.OnAttacked(enemy.transform.position - this.transform.position);
                 }
             }
 
@@ -344,4 +370,42 @@ public class PlayerController : MonoBehaviour
         _bashCooldownTimer = 0.0f;
         _bashEffect.emitting = false;
     }
+
+    /*-------------------------  Health  -------------------------*/
+
+    public void OnHeal(int heal)
+    {
+        OnChangeHealth(heal);
+    }
+
+    public void OnTakeDamage(int damage)
+    {
+        OnChangeHealth(-damage);
+    }
+
+    private void OnChangeHealth(int change)
+    {
+        _health = Mathf.Max(Mathf.Min(_maxHealth, _health + change), 0);
+        SpawnHPIndicator(change);
+        _uiManager.SetHealthPercentage(_health / (float)_maxHealth);
+
+        if (_health == 0)
+        {
+            OnDeath();
+        }
+    }
+
+    private void SpawnHPIndicator(int hp)
+    {
+        var go = Instantiate<GameObject>(_hitPointIndicator, null);
+        go.transform.position = this.transform.position + this.transform.up * 2.0f;
+        var indicator = go.GetComponent<HitPointIndicator>();
+        indicator.Initialize(hp);
+    }
+
+    private void OnDeath()
+    {
+        Debug.Log("You Died :(");
+    }
+
 }
