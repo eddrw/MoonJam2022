@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _model;
     [SerializeField] private Transform _cursor;
     [SerializeField] private Transform _bashCollider;
+    [SerializeField] private Transform _groundCheck;
     [SerializeField] private Camera _camera;
 
     [Header("Prefabs")]
@@ -34,7 +35,6 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody _rb;
     private Collider _collider;
-
 
     // Phantom Dash Data
     private bool _isDashing;
@@ -74,11 +74,6 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
-
-        //if (Input.GetKeyDown(KeyCode.LeftShift))
-        //{
-        //    ShortAttack();
-        //}
 
         if (Input.GetMouseButtonDown(1) && !_isDashing)
         {
@@ -171,7 +166,10 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        _rb.AddForce(Vector3.up * _jump, ForceMode.Impulse);
+        if (IsGrounded())
+        {
+            _rb.AddForce(Vector3.up * _jump, ForceMode.Impulse);
+        }
     }
 
     /*-------------------------  Utility  -------------------------*/
@@ -185,6 +183,19 @@ public class PlayerController : MonoBehaviour
     private void SetPlayerGravity(bool enabled)
     {
         _gravityEnabled = enabled;
+    }
+
+    private bool IsGrounded()
+    {
+        var colliders = Physics.OverlapSphere(_groundCheck.position, 0.1f);
+        foreach (var collider in colliders)
+        {
+            if (collider.tag != "Player")
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -274,7 +285,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnBriefcaseBashBegin()
     {
-        //SetPlayerCollisions(false);
         _isBashing = true;
         _bashTimer = 0.0f;
         _bashInitRot = _base.localRotation;
@@ -288,50 +298,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnBriefcaseBashEnd()
     {
-        //SetPlayerCollisions(true);
         _isBashing = false;
         _bashEffect.emitting = false;
     }
-
-    //private void ShortAttack()
-    //{
-    //    var center = _shortAttack.position;
-    //    var halfSize = _shortAttack.localScale * 0.5f;
-
-    //    var colliders = Physics.OverlapBox(center, halfSize, Quaternion.identity, LayerMask.GetMask("Enemy"));
-
-    //    foreach (var collider in colliders)
-    //    {
-    //        var enemy = collider.gameObject.GetComponentInParent<EnemyController>();
-    //        enemy.OnAttacked(enemy.transform.position - this.transform.position);
-    //    }
-    //}
-
-
-    //private Vector3 _center;
-    //private float _radius;
-
-    //private void Attack()
-    //{
-    //    // _center = this.transform.position + _base.forward * 2f;
-    //    _center = _cursor.position;
-    //    _radius = 2.0f;
-    //    var colliders = Physics.OverlapSphere(_center, _radius, LayerMask.GetMask("Enemy"));
-    //    foreach (var collider in colliders)
-    //    {
-    //        var enemy = collider.gameObject.GetComponentInParent<EnemyController>();
-    //        enemy.OnAttacked(enemy.transform.position - this.transform.position);
-    //    }
-    //}
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawWireSphere(_center, _radius);
-
-    //    // if (_cursor != null)
-    //    // {
-    //    //     Gizmos.DrawSphere(_cursor.position, 1);
-    //    // }
-    //}
 }
