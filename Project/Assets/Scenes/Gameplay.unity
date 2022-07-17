@@ -6077,7 +6077,7 @@ GameObject:
   - component: {fileID: 307124519}
   - component: {fileID: 307124522}
   - component: {fileID: 307124523}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -9464,7 +9464,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 674060043}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Objects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9832,6 +9832,7 @@ MonoBehaviour:
   _groundCheck: {fileID: 1341610399}
   _camera: {fileID: 307124520}
   _uiManager: {fileID: 1196371742}
+  _scriptGun: {fileID: 2073999469}
   _dashEffectPrefab: {fileID: 1472917612836279069, guid: 4ce23897c8d9e45d5898fbb0cf8b5728,
     type: 3}
   _bashEffectPrefab: {fileID: 1808775819562064179, guid: 3f50815fab67c4bd3a7913b3d75abf92,
@@ -9842,6 +9843,8 @@ MonoBehaviour:
   _dashSpeed: 40
   _jump: 20
   _gravity: -10
+  _bashDamage: 5
+  _scriptDamage: 1
   _dashCooldownDuration: 1
   _bashCooldownDuration: 1
   _jumpCooldownDuration: 1
@@ -27436,7 +27439,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2022458467}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Cursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27546,7 +27549,7 @@ GameObject:
   - component: {fileID: 2043270887}
   - component: {fileID: 2043270890}
   - component: {fileID: 2043270889}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}

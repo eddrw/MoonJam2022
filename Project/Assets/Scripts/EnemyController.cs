@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IAttackable
 {
 
     [SerializeField] private int _maxHealth;
     [SerializeField] private float _repathFrequency = 0.5f;
     [SerializeField] private float _playerDetectionDistance = 20.0f;
+    [SerializeField] private GameObject _hitPointIndicator;
+    [SerializeField] private Transform _attackBox;
+    [SerializeField] private float _attackCooldown = 1.0f;
+    [SerializeField] private int _attackDamage = 1;
+
+    private float _attackTimer;
 
     private LevelManager _levelManager;
 
@@ -30,14 +36,16 @@ public class EnemyController : MonoBehaviour
 
     private Rigidbody _rb;
     private NavMeshAgent _agent;
-    private Transform _player;
+    private Transform _playerTarget;
+    private PlayerController _player;
 
 
     void Awake()
     {
         _rb = this.GetComponent<Rigidbody>();
         _agent = this.GetComponent<NavMeshAgent>();
-        _player = GameObject.Find("Player").transform;
+        _player = GameObject.Find("Player").GetComponent<PlayerController>();
+        _playerTarget = _player.transform;
         _levelManager = GameObject.Find("Level Manager").GetComponent<LevelManager>();
         _moveTarget = this.transform.position;
         _repathTimer = Random.Range(0f, _repathFrequency);
@@ -49,33 +57,12 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        _attackTimer += Time.deltaTime;
+
         ExecuteState();
 
         UpdateMovePath();
 
-        //_checkTimer += Time.deltaTime;
-        //if (_checkTimer > 0.5f)
-        //{
-        //    _checkTimer = 0.0f;
-        //    if (_agent.enabled && IsAgentOnNavMesh(_agent.transform))
-        //    {
-        //        _agent.SetDestination(_player.position);
-        //    }
-        //}
-        //else {
-        //    _stunTimer += Time.deltaTime;
-        //    if (_stunTimer > STUN_DURATION)
-        //    {
-        //        _stunTimer = 0.0f;
-        //        this.transform.position += Vector3.up * 5;
-        //        if (Physics.Raycast(transform.position - Vector3.up * 3, -Vector3.up, out RaycastHit hit, Mathf.Infinity))
-        //        {
-        //            this.transform.position = hit.point + Vector3.up * 1;
-        //            this.transform.localRotation = Quaternion.identity;
-        //            _agent.enabled = true;
-        //        }
-        //    }
-        //}
     }
 
     private void ExecuteState()
@@ -125,7 +112,25 @@ public class EnemyController : MonoBehaviour
     {
         // Move towards player and attack
 
-        SetMoveTarget(_player.position);
+        SetMoveTarget(_playerTarget.position);
+
+
+        if (_attackTimer > _attackCooldown)
+        {
+            if (SquaredDistanceToTarget() <= 3 * 3)
+            {
+                _attackTimer = 0.0f;
+                AttackPlayer();
+            }
+        }
+    }
+
+    private void AttackPlayer()
+    {
+        if (Physics.CheckBox(_attackBox.position, _attackBox.localScale / 2, Quaternion.identity, LayerMask.GetMask("Player")))
+        {
+            _player.OnTakeDamage(_attackDamage);
+        }
     }
 
     private void SwitchState(State newState)
@@ -203,7 +208,7 @@ public class EnemyController : MonoBehaviour
 
     private bool CanDetectPlayer()
     {
-        var toPlayer = _player.position - this.transform.position;
+        var toPlayer = _playerTarget.position - this.transform.position;
         var distSqrd = toPlayer.sqrMagnitude;
         if (distSqrd <= _playerDetectionDistance * _playerDetectionDistance)
         {
@@ -237,16 +242,30 @@ public class EnemyController : MonoBehaviour
     //    return false;
     //}
 
-    public void OnAttacked(Vector3 dir)
+    public void OnAttacked(Vector3 source, int damage)
     {
-        //if (_agent.enabled)
-        //{
-        //    _agent.isStopped = true;
-        //}
-        _agent.enabled = false;
-        _rb.isKinematic = false;
-        _rb.AddForce(dir * 20f + Vector3.up * 5, ForceMode.VelocityChange);
+        _health -= damage;
+        _health = Mathf.Max(0, _health);
+
+        SpawnHPIndicator(-damage);
+
+        if (_health == 0)
+        {
+            _agent.enabled = false;
+            _rb.isKinematic = false;
+            var dir = this.transform.position - source;
+            _rb.AddForce(dir * 10f + Vector3.up * 5, ForceMode.VelocityChange);
+        }
     }
+
+    private void SpawnHPIndicator(int hp)
+    {
+        var go = Instantiate<GameObject>(_hitPointIndicator, null);
+        go.transform.position = this.transform.position + this.transform.up * 2.0f;
+        var indicator = go.GetComponent<HitPointIndicator>();
+        indicator.Initialize(hp);
+    }
+
 
     private void OnDrawGizmosSelected()
     {

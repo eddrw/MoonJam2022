@@ -21,12 +21,20 @@ public class ScriptGun : MonoBehaviour
     private Vector3 _prevPosition;
     private Vector3 _currPosition;
 
+    private int _damage;
 
-    private void Awake()
+    public void Initialize(int damage)
     {
+        _damage = damage;
         _words = Regex.Replace(text, "[^a-zA-Z0-9 _]", string.Empty).Split(" ");
         Debug.Log("Words: " + string.Join(", ", _words));
     }
+
+    //private void Awake()
+    //{
+    //    _words = Regex.Replace(text, "[^a-zA-Z0-9 _]", string.Empty).Split(" ");
+    //    Debug.Log("Words: " + string.Join(", ", _words));
+    //}
 
     private void Update()
     {
@@ -58,6 +66,6 @@ public class ScriptGun : MonoBehaviour
         go.transform.localRotation = this.transform.rotation;
         ScriptBullet bullet = go.GetComponent<ScriptBullet>();
 
-        bullet.Initialize(word, Camera.main.transform, _bulletSpeed, velocity);
+        bullet.Initialize(word, Camera.main.transform, _bulletSpeed, velocity, _damage);
     }
 }

@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private Camera _camera;
     [SerializeField] private UIManager _uiManager;
+    [SerializeField] private ScriptGun _scriptGun;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject _dashEffectPrefab;
@@ -28,6 +29,9 @@ public class PlayerController : MonoBehaviour
     private bool _gravityEnabled = true;
 
     [Header("Attack Settings")]
+    [SerializeField] private int _bashDamage = 2;
+    [SerializeField] private int _scriptDamage = 1;
+
     [SerializeField] private float _dashCooldownDuration = 1.0f;
     [SerializeField] private float _bashCooldownDuration = 1.0f;
     [SerializeField] private float _jumpCooldownDuration = 0.2f;
@@ -75,6 +79,7 @@ public class PlayerController : MonoBehaviour
         _rb.useGravity = false;
         _health = _maxHealth;
         _uiManager.SetHealthPercentage(_health / _maxHealth);
+        _scriptGun.Initialize(_scriptDamage);
     }
 
     private void Update()
@@ -319,11 +324,13 @@ public class PlayerController : MonoBehaviour
                     _bashEffect.gameObject.SetActive(true);
                 }
 
-                var colliders = Physics.OverlapBox(_bashCollider.position, _bashCollider.localScale / 2, Quaternion.identity, LayerMask.GetMask("Enemy"));
+                var colliders = Physics.OverlapBox(_bashCollider.position, _bashCollider.localScale / 2, Quaternion.identity, LayerMask.GetMask("Attackable"));
                 foreach (var collider in colliders)
                 {
-                    var enemy = collider.gameObject.GetComponentInParent<EnemyController>();
-                    enemy.OnAttacked(enemy.transform.position - this.transform.position);
+                    var attackTarget = collider.gameObject.GetComponentInParent<IAttackable>();
+                    attackTarget.OnAttacked(this.transform.position, _bashDamage);
+                    //var enemy = collider.gameObject.GetComponentInParent<EnemyController>();
+                    //enemy.OnAttacked(enemy.transform.position - this.transform.position);
                 }
             }
 

@@ -47,13 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _text: {fileID: 2326717405599129945}
   _canvas: {fileID: 2326717405124435283}
-  _healColor: {r: 0, g: 1, b: 0, a: 1}
-  _damageColor: {r: 1, g: 0, b: 0, a: 1}
+  _healColor: {r: 0, g: 0.5754717, b: 0, a: 1}
+  _damageColor: {r: 0.6415094, g: 0, b: 0, a: 1}
   _neutralColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   _gravityMagnitude: 30
   _initSpeed: 12
   _duration: 1
-  _baseScale: 1
+  _baseScale: 0.75
   _hpScale: 0.5
 --- !u!1 &2326717405599129944
 GameObject:
