@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private Animator _animator;
     [SerializeField] private UIManager _uiManager;
+    [SerializeField] private GameObject _briefcase;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject _dashEffectPrefab;
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour
         _rb = this.GetComponent<Rigidbody>();
         _rb.useGravity = false;
         _animator = GetComponent<Animator>();
+        _briefcase.SetActive(false);
     }
 
     private void Update()
@@ -349,6 +351,8 @@ public class PlayerController : MonoBehaviour
         _bashEffect = go.GetComponent<TrailRenderer>();
 
         _uiManager.SetAbilityPercentage("Bash", 1.0f);
+
+        _briefcase.SetActive(true);
     }
 
     private void OnBriefcaseBashEnd()
@@ -356,5 +360,6 @@ public class PlayerController : MonoBehaviour
         _isBashing = false;
         _bashCooldownTimer = 0.0f;
         _bashEffect.emitting = false;
+        _briefcase.SetActive(false);
     }
 }
