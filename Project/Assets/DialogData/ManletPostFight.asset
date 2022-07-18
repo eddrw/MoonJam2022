@@ -30,3 +30,10 @@ MonoBehaviour:
     Doth not worry about it. Worketh and becometh a better
     sir and leaveth thy mother at peace.'
   - "MANLET\nI don\u2019t want to work, but... maybe you are right."
+  imagesToDisplay:
+  - billyNeutral
+  - manletAngry
+  - billyNeutral
+  - manletNeutral
+  - billyNeutral
+  - manletSmile

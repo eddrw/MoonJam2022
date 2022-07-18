@@ -50,3 +50,16 @@ MonoBehaviour:
 
     You are the demon I was warned of. Corpa Coin is a guaranteed thing.
     Your words only serve to confuse me!'
+  imagesToDisplay:
+  - henryBigSmile
+  - corpaSad
+  - corpaSad
+  - corpaSad
+  - henrySmile
+  - corpaEyesUp
+  - corpaSad
+  - corpaNeutral
+  - billyNeutral
+  - corpaNeutral
+  - billyNeutral
+  - corpaEyesUp

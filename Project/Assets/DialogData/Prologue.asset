@@ -33,3 +33,10 @@ MonoBehaviour:
 
     I shall bringeth forth a new age of theatre nay longer
     burdened by the weight of depressed stories.'
+  imagesToDisplay:
+  - billySmile
+  - billyNeutral
+  - billyNeutral
+  - billyNeutral
+  - billyEyesClosed
+  - billyNeutral

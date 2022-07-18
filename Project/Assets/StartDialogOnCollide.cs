@@ -24,6 +24,5 @@ public class StartDialogOnCollide : MonoBehaviour
         {
             player.Dialog.ShowDialog(dialogObject);
         }
-        
     }
 }

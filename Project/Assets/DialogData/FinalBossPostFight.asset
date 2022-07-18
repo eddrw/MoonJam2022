@@ -35,3 +35,10 @@ MonoBehaviour:
 
     Just a travesty.'
   - FIN
+  imagesToDisplay:
+  - billyNeutral
+  - playMaster
+  - billyNeutral
+  - billyNeutral
+  - billyEyesClosed
+  - billyEyesClosed

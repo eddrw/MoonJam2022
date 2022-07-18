@@ -19,8 +19,8 @@ MonoBehaviour:
     attempt to maketh up for thy short comings. '
   - 'BILLY SHAKESPEARE
 
-    Henry hast did stay by thy side through everything. 
-    Doth right by him and receiveth an actual job. '
+    Henry hast did stay by thy side through everything. Doth
+    right by him and receiveth an actual job. '
   - 'CORPA
 
     Perhaps you are right. It is time to leave behind the life of NFTs
@@ -29,3 +29,8 @@ MonoBehaviour:
 
     I no longer need this briefcase. Take it and may it bring you the
     prosperity it could never bring me. '
+  imagesToDisplay:
+  - billyNeutral
+  - billyNeutral
+  - corpaNeutral
+  - corpaNeutral

@@ -32,3 +32,8 @@ MonoBehaviour:
 
     Enough talk! Thou art but a vessel for evil and shalt
     falleth ere mine own blade.'
+  imagesToDisplay:
+  - playMaster
+  - billyNeutral
+  - playMaster
+  - billyNeutral

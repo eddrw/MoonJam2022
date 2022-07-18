@@ -25,3 +25,7 @@ MonoBehaviour:
     The theatre is meanteth for any face. Wend forth and
     doth not worry about thy appearance, but rather thy delivery of words on the
     stage.'
+  imagesToDisplay:
+  - billyNeutral
+  - phantomNeutral
+  - billyNeutral

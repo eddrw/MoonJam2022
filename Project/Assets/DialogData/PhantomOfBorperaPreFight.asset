@@ -36,3 +36,10 @@ MonoBehaviour:
     You are the same as the others who skulk through these halls. You
     would mock my appearance given the chance. Now join those who could not escape
     me!'
+  imagesToDisplay:
+  - billyNeutral
+  - billyNeutral
+  - billyEyesClosed
+  - phantomNeutral
+  - billyNeutral
+  - phantomNeutral

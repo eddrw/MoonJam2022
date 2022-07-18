@@ -41,3 +41,12 @@ MonoBehaviour:
   - 'MANLET
 
     I will never do such a thing. You will suffer my wrath!'
+  imagesToDisplay:
+  - billyNeutral
+  - billyEyesClosed
+  - billyNeutral
+  - manletAngry
+  - billyNeutral
+  - manletNeutral
+  - billyNeutral
+  - manletAngry

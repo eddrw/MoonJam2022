@@ -38,3 +38,11 @@ MonoBehaviour:
 
     Corpa Coin is going to blow up big. It is going to make us millionaires,
     and I cannot let you stop me from becoming the richest corpa the world has seen.'
+  imagesToDisplay:
+  - billyNeutral
+  - billyEyesClosed
+  - corpaEyesUp
+  - billyNeutral
+  - corpaNeutral
+  - billyNeutral
+  - corpaEyesUp
