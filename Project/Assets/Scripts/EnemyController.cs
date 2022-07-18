@@ -14,7 +14,13 @@ public class EnemyController : MonoBehaviour, IAttackable
     [SerializeField] private float _attackCooldown = 1.0f;
     [SerializeField] private int _attackDamage = 1;
 
+    [SerializeField] private Animator _animator;
+
+    [SerializeField] private float _attackDelay = 0.5f;
+
+    private bool _isAttacking;
     private float _attackTimer;
+    [SerializeField] private float _attackCooldownTimer;
 
     private LevelManager _levelManager;
 
@@ -39,6 +45,9 @@ public class EnemyController : MonoBehaviour, IAttackable
     private Transform _playerTarget;
     private PlayerController _player;
 
+    private Vector3 _prevPosition;
+    private Vector3 _currPosition;
+
 
     void Awake()
     {
@@ -57,11 +66,36 @@ public class EnemyController : MonoBehaviour, IAttackable
 
     void Update()
     {
-        _attackTimer += Time.deltaTime;
+        _attackCooldownTimer += Time.deltaTime;
 
         ExecuteState();
 
         UpdateMovePath();
+
+        if (_isAttacking)
+        {
+            _attackCooldownTimer = 0.0f;
+            _attackTimer += Time.deltaTime;
+            if (_attackTimer >= _attackDelay)
+            {
+                AttackPlayer();
+            }
+        } else
+        {
+
+            _currPosition = this.transform.position;
+            bool isMoving = (_currPosition - _prevPosition).sqrMagnitude / Time.deltaTime > 0.1f;
+            _prevPosition = _currPosition;
+
+            if (isMoving)
+            {
+                SetAnimationState("Walk");
+            }
+            else
+            {
+                SetAnimationState("Idle");
+            }
+        }
 
     }
 
@@ -115,14 +149,21 @@ public class EnemyController : MonoBehaviour, IAttackable
         SetMoveTarget(_playerTarget.position);
 
 
-        if (_attackTimer > _attackCooldown)
+        if (!_isAttacking && _attackCooldownTimer > _attackCooldown)
         {
-            if (SquaredDistanceToTarget() <= 3 * 3)
+            if (SquaredDistanceToTarget() <= 1.6f * 1.6f)
             {
-                _attackTimer = 0.0f;
-                AttackPlayer();
+                StartPlayerAttack();
             }
         }
+    }
+
+    private void StartPlayerAttack()
+    {
+        _isAttacking = true;
+        _attackTimer = 0.0f;
+        _agent.isStopped = true;
+        SetAnimationState("Slash");
     }
 
     private void AttackPlayer()
@@ -131,6 +172,14 @@ public class EnemyController : MonoBehaviour, IAttackable
         {
             _player.OnTakeDamage(_attackDamage);
         }
+        _isAttacking = false;
+        if (_agent.enabled)
+        {
+            _agent.isStopped = false;
+        }
+        _attackCooldownTimer = 0.0f;
+
+        SetAnimationState("Idle");
     }
 
     private void SwitchState(State newState)
@@ -154,6 +203,13 @@ public class EnemyController : MonoBehaviour, IAttackable
     {
         _state = State.Patrol;
         MoveToRandomPatrolPoint();
+    }
+
+    private void SetAnimationState(string state)
+    {
+        _animator.SetBool("Slash", state == "Slash");
+        _animator.SetBool("Idle", state == "Idle");
+        _animator.SetBool("Walk", state == "Walk");
     }
 
 

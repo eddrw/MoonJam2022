@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private ScriptGun _scriptGun;
 
+    [SerializeField] private Animator _animator;
+    [SerializeField] private GameObject _briefcase;
+
+
     [Header("Prefabs")]
     [SerializeField] private GameObject _dashEffectPrefab;
     [SerializeField] private GameObject _bashEffectPrefab;
@@ -77,6 +81,8 @@ public class PlayerController : MonoBehaviour
         _collider = this.GetComponent<CapsuleCollider>();
         _rb = this.GetComponent<Rigidbody>();
         _rb.useGravity = false;
+        _animator = GetComponent<Animator>();
+        _briefcase.SetActive(false);
         _health = _maxHealth;
         _uiManager.SetHealthPercentage(_health / _maxHealth);
         _scriptGun.Initialize(_scriptDamage);
@@ -132,6 +138,29 @@ public class PlayerController : MonoBehaviour
         HandleRotation();
 
         ApplyGravity();
+
+        if (_rb.velocity.sqrMagnitude > 0.01f)
+        {
+            
+            _animator.SetBool("Idle", false);
+
+            if (Vector3.Dot(_rb.velocity, _base.forward) < 0)
+            {
+                _animator.SetBool("Walking", false);
+                _animator.SetBool("WalkingBackwards", true);
+            }
+            else
+            {
+                _animator.SetBool("Walking", true);
+                _animator.SetBool("WalkingBackwards", false);
+            }
+        }
+        else
+        {
+            _animator.SetBool("WalkingBackwards", false);
+            _animator.SetBool("Walking", false);
+            _animator.SetBool("Idle", true);
+        }
     }
 
     /*-------------------------  Cursor  -------------------------*/
@@ -322,6 +351,7 @@ public class PlayerController : MonoBehaviour
                 if (!_bashEffect.gameObject.activeSelf)
                 {
                     _bashEffect.gameObject.SetActive(true);
+                    _briefcase.SetActive(true);
                 }
 
                 var colliders = Physics.OverlapBox(_bashCollider.position, _bashCollider.localScale / 2, Quaternion.identity, LayerMask.GetMask("Attackable"));
@@ -329,8 +359,6 @@ public class PlayerController : MonoBehaviour
                 {
                     var attackTarget = collider.gameObject.GetComponentInParent<IAttackable>();
                     attackTarget.OnAttacked(this.transform.position, _bashDamage);
-                    //var enemy = collider.gameObject.GetComponentInParent<EnemyController>();
-                    //enemy.OnAttacked(enemy.transform.position - this.transform.position);
                 }
             }
 
@@ -369,6 +397,7 @@ public class PlayerController : MonoBehaviour
         _isBashing = false;
         _bashCooldownTimer = 0.0f;
         _bashEffect.emitting = false;
+        _briefcase.SetActive(false);
     }
 
     /*-------------------------  Health  -------------------------*/

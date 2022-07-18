@@ -27,15 +27,14 @@ public class CameraController : MonoBehaviour
 
         var offset = this.transform.position - _target.position;
         _offsetDirection = offset.normalized;
-        _offsetDistance = offset.magnitude;
+        _offsetDistance = _offsetDistance <= 0.001f ? offset.magnitude : _offsetDistance;
         this.transform.LookAt(_target.position);
 
     }
 
 
-    void Update()
+    void LateUpdate()
     {
-        // this.transform.position = _target.position + _targetOffset;
         var targetPosition = _target.position + _offsetDirection * _offsetDistance;
         transform.position = Vector3.SmoothDamp(this.transform.position, targetPosition, ref _velocity, _smoothTime);
     }
