@@ -12,6 +12,8 @@ public class ScriptGun : MonoBehaviour
     [SerializeField] private float _bulletSpeed = 10f;
 
     [SerializeField] private GameObject _bulletPrefab;
+    private bool inDialog = false;
+    public void SetDialog(bool val) { inDialog = val; }
 
     private string[] _words;
     private int _wordIndex = 0;
@@ -32,11 +34,15 @@ public class ScriptGun : MonoBehaviour
     {
         _timeSinceLastShot += Time.deltaTime;
 
-        if (Input.GetMouseButton(0) && _timeSinceLastShot > _coolDown)
+        if (!inDialog)
         {
-            _timeSinceLastShot = 0.0f;
-            Shoot();
+            if (Input.GetMouseButton(0) && _timeSinceLastShot > _coolDown)
+            {
+                 _timeSinceLastShot = 0.0f;
+                 Shoot();
+            }
         }
+        
 
         _prevPosition = _currPosition;
         _currPosition = this.transform.position;

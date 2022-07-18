@@ -11,6 +11,8 @@ public class Dialog : MonoBehaviour
     [SerializeField] private TMP_Text _textMesh;
     [SerializeField] private GameObject profileImage;
     [SerializeField] private Sprite[] sprites;
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject scriptGun;
 
     private Dictionary<string, int> spriteDict;
 
@@ -52,6 +54,8 @@ public class Dialog : MonoBehaviour
         IsOpen = true;
         _dialogBox.SetActive(true);
         StartCoroutine(StepThroughDialog(dialogObject));
+        player.GetComponent<PlayerController>().SetDialog(true);
+        scriptGun.GetComponent<ScriptGun>().SetDialog(true);
     }
 
     private IEnumerator StepThroughDialog(DialogObject dialogObject)
@@ -73,5 +77,7 @@ public class Dialog : MonoBehaviour
         IsOpen = false;
         _dialogBox.SetActive(false);
         _textMesh.text = string.Empty;
+        player.GetComponent<PlayerController>().SetDialog(false);
+        scriptGun.GetComponent<ScriptGun>().SetDialog(false);
     }
 }

@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _jump = 20.0f;
     [SerializeField] private float _gravity = -20f;
     private bool _gravityEnabled = true;
+    private bool inDialog = false;
 
     [Header("Attack Settings")]
     [SerializeField] private float _dashCooldownDuration = 1.0f;
@@ -64,6 +65,7 @@ public class PlayerController : MonoBehaviour
     private TrailRenderer _bashEffect;
 
     public Dialog Dialog => dialog;
+    public void SetDialog(bool val) { inDialog = val; }
 
     private void Awake()
     {
@@ -76,37 +78,40 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        UpdatedCursorPosition();
+        if (!inDialog)
+        {
+            UpdatedCursorPosition();
 
-        if (Input.GetKeyDown(KeyCode.Space) && _jumpCooldownTimer >= _jumpCooldownDuration)
-        {
-            Jump();
-        }
-        else
-        {
-            _jumpCooldownTimer += Time.deltaTime;
-            var cooldownPercentage = 1f - Mathf.Clamp01(_jumpCooldownTimer / _jumpCooldownDuration);
-            _uiManager.SetAbilityPercentage("Jump", cooldownPercentage);
-        }
-
-        if (Input.GetMouseButtonDown(1) && !_isDashing)
-        {
-            if (_dashCooldownTimer >= _dashCooldownDuration)
+            if (Input.GetKeyDown(KeyCode.Space) && _jumpCooldownTimer >= _jumpCooldownDuration)
             {
-                OnPhantomDashBegin();
+                Jump();
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !_isBashing)
-        {
-            if (_bashCooldownTimer >= _bashCooldownDuration)
+            else
             {
-                OnBriefcaseBashBegin();
+                _jumpCooldownTimer += Time.deltaTime;
+                var cooldownPercentage = 1f - Mathf.Clamp01(_jumpCooldownTimer / _jumpCooldownDuration);
+                _uiManager.SetAbilityPercentage("Jump", cooldownPercentage);
             }
-        }
 
-        UpdatePhantomDash();
-        UpdateBriefcaseBash();
+            if (Input.GetMouseButtonDown(1) && !_isDashing)
+            {
+                if (_dashCooldownTimer >= _dashCooldownDuration)
+                {
+                    OnPhantomDashBegin();
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !_isBashing)
+            {
+                if (_bashCooldownTimer >= _bashCooldownDuration)
+                {
+                    OnBriefcaseBashBegin();
+                }
+            }
+
+            UpdatePhantomDash();
+            UpdateBriefcaseBash();
+        }
     }
 
     private void FixedUpdate()
@@ -164,23 +169,27 @@ public class PlayerController : MonoBehaviour
 
         var direction = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W))
+        if (!inDialog)
         {
-            direction += forward;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            direction -= forward;
-        }
+            if (Input.GetKey(KeyCode.W))
+            {
+                direction += forward;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                direction -= forward;
+            }
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            direction += right;
+            if (Input.GetKey(KeyCode.D))
+            {
+                direction += right;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                direction -= right;
+            }
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-            direction -= right;
-        }
+        
 
         direction.y = 0.0f;
         direction.Normalize();
