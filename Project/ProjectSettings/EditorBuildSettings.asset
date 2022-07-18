@@ -11,7 +11,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 4751f981e17de46b3ae6c7a5b2dce5ac
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Gameplay.unity
     guid: 418311ad88d974c148cd4533df215d39
+  - enabled: 1
+    path: Assets/Scenes/Levels/1_DressingRoom.unity
+    guid: cde929ed88f4a441198e4c141b1f6529
+  - enabled: 1
+    path: Assets/Scenes/Levels/2_Stage.unity
+    guid: ce95d1f339d8c4f179965a8d00a901a2
+  - enabled: 1
+    path: Assets/Scenes/Levels/3_Kitchen.unity
+    guid: 5945a2e2fd639404f958cad63ad456da
+  - enabled: 1
+    path: Assets/Scenes/Levels/4_Phantom.unity
+    guid: 8029f901befbd40e186b24313ef5067a
   m_configObjects: {}

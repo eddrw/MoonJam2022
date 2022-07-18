@@ -24,6 +24,8 @@ public class EnemyController : MonoBehaviour, IAttackable
 
     private LevelManager _levelManager;
 
+    private EnemySpawner _spawner;
+
     private int _health;
 
     public enum State
@@ -162,7 +164,11 @@ public class EnemyController : MonoBehaviour, IAttackable
     {
         _isAttacking = true;
         _attackTimer = 0.0f;
-        _agent.isStopped = true;
+        if (_agent.enabled)
+        {
+            _agent.isStopped = true;
+        }
+
         SetAnimationState("Slash");
     }
 
@@ -180,6 +186,11 @@ public class EnemyController : MonoBehaviour, IAttackable
         _attackCooldownTimer = 0.0f;
 
         SetAnimationState("Idle");
+    }
+
+    public void SetDeathCallback(EnemySpawner spawner)
+    {
+        _spawner = spawner;
     }
 
     private void SwitchState(State newState)
@@ -300,18 +311,31 @@ public class EnemyController : MonoBehaviour, IAttackable
 
     public void OnAttacked(Vector3 source, int damage)
     {
-        _health -= damage;
-        _health = Mathf.Max(0, _health);
-
-        SpawnHPIndicator(-damage);
-
-        if (_health == 0)
+        if (_health > 0)
         {
-            _agent.enabled = false;
-            _rb.isKinematic = false;
-            var dir = this.transform.position - source;
-            _rb.AddForce(dir * 10f + Vector3.up * 5, ForceMode.VelocityChange);
+            _health -= damage;
+            _health = Mathf.Max(0, _health);
+
+            SpawnHPIndicator(-damage);
+
+            if (_health == 0)
+            {
+                _agent.enabled = false;
+                _rb.isKinematic = false;
+                var dir = this.transform.position - source;
+                _rb.AddForce(dir * 10f + Vector3.up * 5, ForceMode.VelocityChange);
+
+                if (_spawner != null)
+                {
+                    _spawner.OnEnemyKilled();
+                }
+                
+
+                //TODO: Remove enemy bodies
+                GameObject.Destroy(this.gameObject, 5.0f);
+            }
         }
+        
     }
 
     private void SpawnHPIndicator(int hp)

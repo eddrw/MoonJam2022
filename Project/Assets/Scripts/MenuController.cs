@@ -7,12 +7,13 @@ using UnityEngine.SceneManagement;
 public class MenuController : MonoBehaviour
 {
     [SerializeField] private TMP_Text _blinkText;
+    [SerializeField] private string _firstScene;
 
     private void Update()
     {
         if (Input.anyKey)
         {
-            SceneManager.LoadScene("GamePlay");
+            SceneManager.LoadScene(_firstScene);
         }
 
         float intensity = (1 + Mathf.Sin(2*Time.realtimeSinceStartup)) / 2;

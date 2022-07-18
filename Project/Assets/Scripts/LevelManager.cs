@@ -10,11 +10,13 @@ public class LevelManager : MonoBehaviour
 
     public Vector3[] GetPatrolPositions()
     {
-        if (_patrolPoints == null || _patrolPoints.Length == 0)
-        {
-            return new Vector3[0];
-        }
-        return _patrolPoints.Select(p => p.position).ToArray();
+        //if (_patrolPoints != null)
+        //{
+        //    return _patrolPoints.Select(p => p.position).ToArray();
+        //}
+
+        return new Vector3[0];
+
     }
 
     private void OnDrawGizmos()

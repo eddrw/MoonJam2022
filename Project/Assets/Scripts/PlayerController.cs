@@ -359,7 +359,11 @@ public class PlayerController : MonoBehaviour
                 foreach (var collider in colliders)
                 {
                     var attackTarget = collider.gameObject.GetComponentInParent<IAttackable>();
-                    attackTarget.OnAttacked(this.transform.position, _bashDamage);
+                    if (attackTarget != null)
+                    {
+                        attackTarget.OnAttacked(this.transform.position, _bashDamage);
+                    }
+
                 }
             }
 

@@ -60,7 +60,7 @@ public class ScriptBullet : MonoBehaviour
             attackTarget.OnAttacked(this.transform.position, _damage);
         }
 
-        if (other.tag != "Player" && other.tag != "ScriptBullet")
+        if (!other.isTrigger && other.tag != "Player" && other.tag != "ScriptBullet" && other.gameObject.layer != LayerMask.NameToLayer("IgnoreBullets"))
         {
             Explode();
             //Debug.Log(LayerMask.NameToLayer("Attackable"));
