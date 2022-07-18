@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _briefcase.SetActive(false);
         _health = _maxHealth;
+        _uiManager = GameObject.Find("UI Manager").GetComponent<UIManager>();
         _uiManager.SetHealthPercentage(_health / _maxHealth);
         _scriptGun.Initialize(_scriptDamage);
     }
