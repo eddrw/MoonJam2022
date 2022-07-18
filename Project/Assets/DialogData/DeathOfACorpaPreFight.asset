@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553f672d0d8a6044b94c600dde58582f, type: 3}
+  m_Name: DeathOfACorpaPreFight
+  m_EditorClassIdentifier: 
+  dialogue:
+  - 'HENRY
+
+    Welcome home from work, I made your favorite chili. Make any big
+    NFT sales today?'
+  - 'CORPA
+
+    ...'
+  - "CORPA\nThere are no sales to be had. The NFT scene is as dry as the Sahara.
+    I can\u2019t keep going door to door trying to sell these damned pictures."
+  - "CORPA\nI can\u2019t provide for this family off the few degenerates left who
+    buy these. "
+  - "HENRY\nIt will be alright. My cooking streams are starting to get peoples\u2019
+    attention. Together, we will make enough to get by."
+  - "CORPA\nHenry\u2026 Smug Illustrated fired me. I just couldn\u2019t sell enough
+    to keep my quota. "
+  - "CORPA\nI can\u2019t be the corpa I\u2019ve always promised you I would be. I
+    don\u2019t deserve you or your delicious anytime chili for 2."
+  - 'CORPA
+
+    I have a plan though. There is this new thing called Corpa Coin.
+    All I need to do is take some of our savings and invest it into it. We will be
+    rich in no time.'
+  - "BILLY SHAKESPEARE\nPoor poor Corpa, thee wilt not falleth for the fool\u2019s
+    trap yond is the Corpa Coin! Thee shouldst not throweth thy savings into the
+    abyss."
+  - 'CORPA
+
+    ...Who said that?'
+  - 'BILLY SHAKESPEARE
+
+    I am hither to save thee! Only thee can see me. Henry
+    is blind to mine own presence. I am hither to bid thee yond thee wilt not throweth
+    thy savings into the abyss.'
+  - 'CORPA
+
+    You are the demon I was warned of. Corpa Coin is a guaranteed thing.
+    Your words only serve to confuse me!'

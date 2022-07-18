@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553f672d0d8a6044b94c600dde58582f, type: 3}
+  m_Name: ManletPostFight
+  m_EditorClassIdentifier: 
+  dialogue:
+  - 'BILLY SHAKESPEARE
+
+    Uhh... I was not expecting to defeat thee yond easily.'
+  - "MANLET\nShut up, I wasn\u2019t ready. You didn\u2019t let me stretch."
+  - 'BILLY SHAKESPEARE
+
+    I doth not wish to maketh thee suffer any further. Taketh
+    this job application to McBorpa and ensure to me yond thee shall not spendeth
+    too much time in the freezer.'
+  - 'MANLET
+
+    What? Why would I spend time in the freezer?'
+  - 'BILLY SHAKESPEARE
+
+    Doth not worry about it. Worketh and becometh a better
+    sir and leaveth thy mother at peace.'
+  - "MANLET\nI don\u2019t want to work, but... maybe you are right."

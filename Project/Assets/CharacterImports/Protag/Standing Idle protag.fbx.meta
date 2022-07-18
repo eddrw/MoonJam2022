@@ -6,7 +6,62 @@ ModelImporter:
   - first:
       74: -203655887218126122
     second: mixamo.com
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BROWS
+    second: {fileID: 2100000, guid: 0a1ef629b4f4a45458f3d6cd1bee0e44, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SHOE
+    second: {fileID: 2100000, guid: bb8d46f852baba642889a026121cbb2e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: dress
+    second: {fileID: 2100000, guid: bb8d46f852baba642889a026121cbb2e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: eyes
+    second: {fileID: 2100000, guid: bb8d46f852baba642889a026121cbb2e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hair
+    second: {fileID: 2100000, guid: 0a1ef629b4f4a45458f3d6cd1bee0e44, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lashes
+    second: {fileID: 2100000, guid: bb8d46f852baba642889a026121cbb2e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mouth
+    second: {fileID: 2100000, guid: 0a1ef629b4f4a45458f3d6cd1bee0e44, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mouthOpen
+    second: {fileID: 2100000, guid: 0a1ef629b4f4a45458f3d6cd1bee0e44, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: neckliner
+    second: {fileID: 2100000, guid: bb8d46f852baba642889a026121cbb2e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: skinBody
+    second: {fileID: 2100000, guid: bb8d46f852baba642889a026121cbb2e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: skinFace
+    second: {fileID: 2100000, guid: bb8d46f852baba642889a026121cbb2e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

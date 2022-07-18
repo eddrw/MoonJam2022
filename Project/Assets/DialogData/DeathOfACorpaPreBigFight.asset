@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553f672d0d8a6044b94c600dde58582f, type: 3}
+  m_Name: DeathOfACorpaPreBigFight
+  m_EditorClassIdentifier: 
+  dialogue:
+  - 'BILLY SHAKESPEARE
+
+    Corpa, thee has''t to hark to me! The corpa coin shall
+    only drive thee and Henry further apart. '
+  - 'BILLY SHAKESPEARE
+
+    Thither art many other routes to making wage. Start humble
+    with a job at McBorpa''s.'
+  - "CORPA\nI can\u2019t work at a McBorpa\u2019s! One of their employees jerked
+    off in the freezer."
+  - 'BILLY SHAKESPEARE
+
+    McBorpa''s may not beest the most wondrous option.  What
+    blinking idiot jerks off in the freezer of a McBorpa''s?'
+  - 'CORPA
+
+    I know. What a degenerate.'
+  - 'BILLY SHAKESPEARE
+
+    But mine own point still stands. A simple job shall doth
+    thee much better than losing thy savings to corpa coin.'
+  - 'CORPA
+
+    Corpa Coin is going to blow up big. It is going to make us millionaires,
+    and I cannot let you stop me from becoming the richest corpa the world has seen.'

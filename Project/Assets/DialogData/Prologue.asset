@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553f672d0d8a6044b94c600dde58582f, type: 3}
+  m_Name: Prologue
+  m_EditorClassIdentifier: 
+  dialogue:
+  - "BILLY SHAKESPEARE\nAll the world\u2019s a stage, \nAnd all the men and women
+    merely\u2026 "
+  - 'BILLY SHAKESPEARE
+
+    Nay nay nay, I doth not like this delivery. Something
+    is not right in the halls of this theatre today.'
+  - 'BILLY SHAKESPEARE
+
+    These halls art soaked in the stench of dry sorrow.'
+  - 'BILLY SHAKESPEARE
+
+    I shall not accept these cries. The stage is doth filled
+    with senseless tragedies.'
+  - 'BILLY SHAKESPEARE
+
+    These depressed demons shalt meeteth their end.'
+  - 'BILLY SHAKESPEARE
+
+    I shall bringeth forth a new age of theatre nay longer
+    burdened by the weight of depressed stories.'

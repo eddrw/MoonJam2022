@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553f672d0d8a6044b94c600dde58582f, type: 3}
+  m_Name: FinalBossPreFight
+  m_EditorClassIdentifier: 
+  dialogue:
+  - 'MASTER OF PLAYS
+
+    You are a fool to think you can change the fate of these
+    sad souls. In the end they will crumble and turn to dust. You are just delaying
+    the inevitable. '
+  - 'BILLY SHAKESPEARE
+
+    Doest thou not believeth in the potential for changeth?
+    Nothing is writ in stone, yet thee standeth hither and gage to lithify thy own
+    ideas.'
+  - 'MASTER OF PLAYS
+
+    Speak in a normal tongue. Speaking in such of manner does
+    not make you the playwright you so idolize. It makes you no less sad than those
+    who you so foolishly help. '
+  - 'BILLY SHAKESPEARE
+
+    Enough talk! Thou art but a vessel for evil and shalt
+    falleth ere mine own blade.'

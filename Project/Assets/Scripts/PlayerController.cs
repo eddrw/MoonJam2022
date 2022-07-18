@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private GameObject _briefcase;
+    [SerializeField] private Dialog dialog;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject _dashEffectPrefab;
@@ -61,6 +62,8 @@ public class PlayerController : MonoBehaviour
     private float _bashTimer;
     private Quaternion _bashInitRot;
     private TrailRenderer _bashEffect;
+
+    public Dialog Dialog => dialog;
 
     private void Awake()
     {
