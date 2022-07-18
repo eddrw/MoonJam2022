@@ -11,6 +11,7 @@ public class SceneChangeTrigger : MonoBehaviour
     [SerializeField] private bool _hideOnStart = false;
     [SerializeField] private Color _otherColor;
     [SerializeField] private float _flashSpeed;
+    [SerializeField] private GameObject dialogTrigger;
 
     [SerializeField] private SceneController _sceneController;
 
@@ -34,6 +35,11 @@ public class SceneChangeTrigger : MonoBehaviour
         if (_hideOnStart)
         {
             ShowHide(false);
+        }
+
+        if (dialogTrigger != null)
+        {
+            dialogTrigger.SetActive(false);
         }
     }
 
@@ -63,5 +69,11 @@ public class SceneChangeTrigger : MonoBehaviour
         {
             _sceneController.LoadNextScene();
         }
+    }
+
+    public void ShowAndRevealDialogTrigger()
+    {
+        ShowHide(true);
+        dialogTrigger.SetActive(true);
     }
 }

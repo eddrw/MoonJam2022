@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553f672d0d8a6044b94c600dde58582f, type: 3}
+  m_Name: ManletPreFight
+  m_EditorClassIdentifier: 
+  dialogue:
+  - 'BILLY SHAKESPEARE
+
+    Hither we findeth potentially the saddest story yet.
+    Poor Manlet hast hath lost his mother to the stout arms of his new step-father,
+    Chadimus. '
+  - 'BILLY SHAKESPEARE
+
+    A being of such stature of Manlet oft finds it sore to
+    compete for attention when matched with someone of Sir Chadimus'' god-sculpted
+    physique.'
+  - 'BILLY SHAKESPEARE
+
+    Manlet, thee wilt accept yond thy mother hast hath found
+    a new love.'
+  - "MANLET\nWho goes there? Don\u2019t talk about my mom!"
+  - 'BILLY SHAKESPEARE
+
+    I am hither as an ally. Thy mother hast hath found peace
+    and thee needs to venture on thy own journey. Thee must nay longer suckle at
+    the tit.'
+  - "MANLET\nStop talking about my mom, man. It\u2019s cringe."
+  - 'BILLY SHAKESPEARE
+
+    Thou art 35 years of age. It is time to venture from
+    the nest receiveth a job.'
+  - 'MANLET
+
+    I will never do such a thing. You will suffer my wrath!'
+  imagesToDisplay:
+  - billyNeutral
+  - billyEyesClosed
+  - billyNeutral
+  - manletAngry
+  - billyNeutral
+  - manletNeutral
+  - billyNeutral
+  - manletAngry

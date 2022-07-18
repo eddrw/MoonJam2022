@@ -26,4 +26,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/4_Phantom.unity
     guid: 8029f901befbd40e186b24313ef5067a
+  - enabled: 1
+    path: Assets/Scenes/Levels/3_5_Kitchen.unity
+    guid: 2322cf183f0d7c34dac1f0097df70c39
+  - enabled: 1
+    path: Assets/Scenes/Levels/5_Manlet.unity
+    guid: b88536e71ab556d4892cf6c492d52c53
+  - enabled: 1
+    path: Assets/Scenes/Levels/6_Finale.unity
+    guid: 98b6f84aca31712448d69f1a379694f5
   m_configObjects: {}

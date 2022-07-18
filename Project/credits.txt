@@ -1,0 +1,10 @@
+eddrw - character models, cardboard props
+broncoxll - writing
+upperlips - got sick this weekend :(
+kyhaii - music
+mcat19 - environment models such as the sick chairs
+cornercasecoder - core game mechanics, level building
+
+animations - mixamo
+all models made in blender
+Unity packages used include probuilder and unity's toon shader, no external assets used that I am aware of

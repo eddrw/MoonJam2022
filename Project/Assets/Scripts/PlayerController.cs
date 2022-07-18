@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private ScriptGun _scriptGun;
+    [SerializeField] private Dialog dialog;
 
     [SerializeField] private Animator _animator;
     [SerializeField] private GameObject _briefcase;
@@ -31,6 +33,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _jump = 10.0f;
     [SerializeField] private float _gravity = -20f;
     private bool _gravityEnabled = true;
+    private bool inDialog = false;
 
     [Header("Attack Settings")]
     [SerializeField] private int _bashDamage = 2;
@@ -76,6 +79,9 @@ public class PlayerController : MonoBehaviour
     // Health
     private int _health;
 
+    public Dialog Dialog => dialog;
+    public void SetDialog(bool val) { inDialog = val; }
+
     private void Awake()
     {
         _collider = this.GetComponent<CapsuleCollider>();
@@ -91,46 +97,54 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (_health <= 0)
         {
-            OnHeal(1);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        
+        if (!inDialog)
         {
-            OnTakeDamage(1);
-        }
-
-        UpdatedCursorPosition();
-
-        if (Input.GetKeyDown(KeyCode.Space) && _jumpCooldownTimer >= _jumpCooldownDuration)
-        {
-            Jump();
-        }
-        else
-        {
-            _jumpCooldownTimer += Time.deltaTime;
-            var cooldownPercentage = 1f - Mathf.Clamp01(_jumpCooldownTimer / _jumpCooldownDuration);
-            _uiManager.SetAbilityPercentage("Jump", cooldownPercentage);
-        }
-
-        if (Input.GetMouseButtonDown(1) && !_isDashing)
-        {
-            if (_dashCooldownTimer >= _dashCooldownDuration)
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                OnPhantomDashBegin();
+                OnHeal(1);
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !_isBashing)
-        {
-            if (_bashCooldownTimer >= _bashCooldownDuration)
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                OnBriefcaseBashBegin();
+                OnTakeDamage(1);
             }
-        }
 
-        UpdatePhantomDash();
-        UpdateBriefcaseBash();
+            UpdatedCursorPosition();
+
+            if (Input.GetKeyDown(KeyCode.Space) && _jumpCooldownTimer >= _jumpCooldownDuration)
+            {
+                Jump();
+            }
+            else
+            {
+                _jumpCooldownTimer += Time.deltaTime;
+                var cooldownPercentage = 1f - Mathf.Clamp01(_jumpCooldownTimer / _jumpCooldownDuration);
+                _uiManager.SetAbilityPercentage("Jump", cooldownPercentage);
+            }
+
+            if (Input.GetMouseButtonDown(1) && !_isDashing)
+            {
+                if (_dashCooldownTimer >= _dashCooldownDuration)
+                {
+                    OnPhantomDashBegin();
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !_isBashing)
+            {
+                if (_bashCooldownTimer >= _bashCooldownDuration)
+                {
+                    OnBriefcaseBashBegin();
+                }
+            }
+
+            UpdatePhantomDash();
+            UpdateBriefcaseBash();
+        }
     }
 
     private void FixedUpdate()
@@ -200,25 +214,29 @@ public class PlayerController : MonoBehaviour
 
         var direction = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W))
+        if (!inDialog)
         {
-            direction += forward;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            direction -= forward;
+            if (Input.GetKey(KeyCode.W))
+            {
+                direction += forward;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                direction -= forward;
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                direction += right;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                direction -= right;
+            }
+
+            direction.y = 0.0f;
         }
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            direction += right;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            direction -= right;
-        }
-
-        direction.y = 0.0f;
         direction.Normalize();
 
         Move(direction);
