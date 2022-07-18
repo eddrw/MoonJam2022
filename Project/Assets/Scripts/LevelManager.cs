@@ -23,8 +23,11 @@ public class LevelManager : MonoBehaviour
         {
             foreach (Transform point in _patrolPoints)
             {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawCube(point.position, Vector3.one * 0.2f);
+                if (point != null)
+                {
+                    Gizmos.color = Color.yellow;
+                    Gizmos.DrawCube(point.position, Vector3.one * 0.2f);
+                }
             }
         }
     }
